@@ -1,1 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luyi Sun — Researcher</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1a1612;
+      --paper: #f7f3ee;
+      --cream: #ede8e0;
+      --dust: #c9bfb2;
+      --gold: #b8965a;
+      --muted: #7a6f64;
+      --warm-white: #faf8f4;
+    }
 
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* ── NAVIGATION ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 3rem;
+      background: rgba(247, 243, 238, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--cream);
+    }
+
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.78rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 64px;
+    }
+
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5rem 4rem 5rem 8vw;
+      position: relative;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.2s forwards;
+    }
+
+    .hero-name {
+      font-size: clamp(3.5rem, 6vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      opacity: 0;
+      animation: fadeUp 1s 0.4s forwards;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-subtitle {
+      margin-top: 1.5rem;
+      font-size: 1.15rem;
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 400px;
+      opacity: 0;
+      animation: fadeUp 1s 0.6s forwards;
+    }
+
+    .hero-tagline {
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--dust);
+      opacity: 0;
+      animation: fadeUp 1s 0.7s forwards;
+    }
+
+    .hero-meta {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      opacity: 0;
+      animation: fadeUp 1s 0.9s forwards;
+    }
+
+    .hero-meta span {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .hero-meta span strong {
+      color: var(--ink);
+      font-weight: 400;
+    }
+
+    .hero-cta {
+      margin-top: 3rem;
+      display: flex;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 1s 1.1s forwards;
+    }
+
+    .btn {
+      display: inline-block;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .btn-primary:hover {
+      background: var(--gold);
+      color: var(--paper);
+    }
+
+    .btn-ghost {
+      border: 1px solid var(--dust);
+      color: var(--muted);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--ink);
+      color: var(--ink);
+    }
+
+    /* ── HERO IMAGE ── */
+    .hero-image {
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeIn 1.4s 0.5s forwards;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      filter: sepia(15%) contrast(1.05);
+    }
+
+    .hero-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, var(--paper) 0%, transparent 15%),
+                  linear-gradient(to top, var(--paper) 0%, transparent 15%);
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      padding: 6rem 8vw;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    .section-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--gold);
+      letter-spacing: 0.2em;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--cream);
+    }
+
+    /* ── ABOUT / RESEARCH FOCUS ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-lead {
+      font-size: 1.4rem;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .about-lead em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .about-body {
+      margin-top: 1.5rem;
+      font-size: 1rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .focus-areas {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .focus-item {
+      padding: 1.2rem 1.5rem;
+      border-left: 2px solid var(--cream);
+      transition: border-color 0.3s;
+    }
+
+    .focus-item:hover {
+      border-left-color: var(--gold);
+    }
+
+    .focus-item h4 {
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.3rem;
+    }
+
+    .focus-item p {
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ── EDUCATION ── */
+    .edu-section { background: var(--warm-white); }
+
+    .edu-timeline {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .edu-timeline::before {
+      content: '';
+      position: absolute;
+      left: 140px;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: var(--cream);
+    }
+
+    .edu-item {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 3rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--cream);
+    }
+
+    .edu-item:last-child { border-bottom: none; }
+
+    .edu-years {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      padding-top: 0.3rem;
+      text-align: right;
+      padding-right: 2rem;
+    }
+
+    .edu-content {
+      position: relative;
+      padding-left: 2.5rem;
+    }
+
+    .edu-content::before {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: 0.6rem;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .edu-degree {
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    .edu-school {
+      font-size: 1rem;
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .edu-location {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--dust);
+      letter-spacing: 0.1em;
+      margin-top: 0.2rem;
+    }
+
+    .edu-note {
+      margin-top: 0.6rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .edu-gpa {
+      display: inline-block;
+      margin-top: 0.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+      padding: 0.2rem 0.6rem;
+      text-transform: uppercase;
+    }
+
+    /* ── PUBLICATIONS ── */
+    .pubs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--cream);
+    }
+
+    .pub-item {
+      background: var(--paper);
+      padding: 2rem 2.5rem;
+      transition: background 0.3s;
+    }
+
+    .pub-item:hover { background: var(--warm-white); }
+
+    .pub-type {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+
+    .pub-title {
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      margin-bottom: 0.6rem;
+    }
+
+    .pub-authors {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .pub-venue {
+      margin-top: 0.4rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--dust);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── EXPERIENCE ── */
+    .exp-section { background: var(--ink); color: var(--paper); }
+
+    .exp-section .section-title { color: var(--paper); }
+    .exp-section .section-num { color: var(--gold); }
+    .exp-section .section-line { background: rgba(255,255,255,0.1); }
+
+    .exp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.08);
+      margin-top: 1rem;
+    }
+
+    .exp-item {
+      background: var(--ink);
+      padding: 2rem;
+      transition: background 0.3s;
+    }
+
+    .exp-item:hover { background: #261e18; }
+
+    .exp-year {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+
+    .exp-title {
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-bottom: 0.4rem;
+    }
+
+    .exp-org {
+      font-size: 0.88rem;
+      color: var(--dust);
+      font-style: italic;
+    }
+
+    /* ── SKILLS ── */
+    .skills-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+
+    .skill-group h3 {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--cream);
+      color: var(--muted);
+      transition: all 0.3s;
+    }
+
+    .tag:hover {
+      border-color: var(--gold);
+      color: var(--ink);
+    }
+
+    /* ── BEYOND / PERSONAL ── */
+    .beyond-section { background: var(--cream); }
+
+    .beyond-content {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .beyond-image {
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      filter: sepia(20%) contrast(1.05);
+    }
+
+    .beyond-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.8s;
+    }
+
+    .beyond-image:hover img { transform: scale(1.04); }
+
+    .beyond-text h3 {
+      font-size: 2rem;
+      font-weight: 300;
+      margin-bottom: 1rem;
+    }
+
+    .beyond-text h3 em { font-style: italic; color: var(--gold); }
+
+    .beyond-text p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      font-weight: 300;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: var(--dust);
+      padding: 3rem 8vw;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dust);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.8s, transform 0.8s;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-text { padding: 6rem 2rem 3rem; }
+      .hero-image { height: 60vw; }
+      section { padding: 4rem 2rem; }
+      .about-grid, .skills-layout, .beyond-content { grid-template-columns: 1fr; gap: 2.5rem; }
+      .edu-timeline::before { display: none; }
+      .edu-item { grid-template-columns: 1fr; gap: 0.5rem; }
+      .edu-years { text-align: left; padding-right: 0; }
+      .pubs-grid, .exp-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 1.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-logo">Luyi Sun</span>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#publications">Publications</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#beyond">Beyond</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" style="padding:0">
+    <div class="hero-text">
+      <p class="hero-eyebrow">Postdoctoral Researcher · Privacy &amp; AI</p>
+      <h1 class="hero-name">Sun <em>Luyi</em><br>孙露旖</h1>
+      <p class="hero-subtitle">Bridging AI, privacy, and health technology — advancing human-AI interaction.</p>
+      <p class="hero-tagline">Ph.D. · Marie Curie Fellow · Zhejiang University</p>
+      <div class="hero-meta">
+        <span>Position &nbsp;<strong>Postdoc, Dept. of Psychology &amp; Behavioral Science</strong></span>
+        <span>Location &nbsp;<strong>Hangzhou, China</strong></span>
+        <span>Languages &nbsp;<strong>Chinese · English · Norwegian</strong></span>
+      </div>
+      <div class="hero-cta">
+        <a href="#publications" class="btn btn-primary">View Publications</a>
+        <a href="#about" class="btn btn-ghost">Learn More</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="piano.jpg" alt="Luyi Sun performing at piano" />
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-header reveal">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Research Focus</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="reveal">
+        <p class="about-lead">
+          My research sits at the intersection of <em>social psychology, AI, privacy</em>, and information security — asking how human behavior, perception, and values shape our relationship with intelligent systems.
+        </p>
+        <p class="about-body">
+          I take an inherently interdisciplinary approach: combining psychological theory, empirical user studies, and technical security research to understand how people navigate privacy in AI-mediated environments. My doctoral work, funded as a Marie Curie Fellow under EU Horizon 2020 (PriMa — Privacy Matters), investigated privacy preferences, threat modeling, and multi-party policy management in homecare and clinical contexts.
+        </p>
+        <p class="about-body" style="margin-top:1rem">
+          I now continue this work at Zhejiang University's Department of Psychology and Behavioral Science, exploring how human-centered design principles can guide the responsible development of AI — and how privacy functions not merely as a technical constraint, but as a deeply social and psychological phenomenon.
+        </p>
+        <p class="about-body" style="margin-top:1rem">
+          <a href="https://scholar.google.com/citations?user=bymBm5wAAAAJ&hl=en" target="_blank" rel="noopener" style="font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold);padding-bottom:2px;">→ Google Scholar Profile</a>
+        </p>
+      </div>
+      <div class="focus-areas reveal" style="transition-delay:0.2s">
+        <div class="focus-item">
+          <h4>Privacy in Health Technology</h4>
+          <p>Predictive models, scoping reviews, and user studies in home care &amp; EHR systems</p>
+        </div>
+        <div class="focus-item">
+          <h4>Multi-Party Policy Management</h4>
+          <p>Consent, policy negotiation, and data governance across healthcare stakeholders</p>
+        </div>
+        <div class="focus-item">
+          <h4>Cybersecurity &amp; Threat Modeling</h4>
+          <p>Substation automation, smart grid security, network and VPN security</p>
+        </div>
+        <div class="focus-item">
+          <h4>Extended Reality &amp; Privacy</h4>
+          <p>Multi-user privacy-preserving mechanisms for XR in clinical settings</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" class="edu-section">
+    <div class="section-header reveal">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Education</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="edu-timeline">
+
+      <div class="edu-item reveal">
+        <div class="edu-years">Oct 2020<br>—<br>Oct 2024</div>
+        <div class="edu-content">
+          <div class="edu-degree">Ph.D. in Information Security &amp; Communication Technology</div>
+          <div class="edu-school">Norwegian University of Science and Technology</div>
+          <div class="edu-location">Gjøvik, Norway</div>
+          <p class="edu-note">Marie Curie Fellow — EU Horizon 2020 PriMa ITN<br>
+          Dissertation: <em>AI-based privacy predictive model in the context of health monitoring</em></p>
+        </div>
+      </div>
+
+      <div class="edu-item reveal">
+        <div class="edu-years">Sep 2018<br>—<br>Jun 2020</div>
+        <div class="edu-content">
+          <div class="edu-degree">M.Eng. in Communication Systems</div>
+          <div class="edu-school">KTH Royal Institute of Technology (3+2 Programme)</div>
+          <div class="edu-location">Stockholm, Sweden</div>
+          <span class="edu-gpa">GPA 4.73 / 5.0</span>
+        </div>
+      </div>
+
+      <div class="edu-item reveal">
+        <div class="edu-years">Sep 2015<br>—<br>Jun 2019</div>
+        <div class="edu-content">
+          <div class="edu-degree">B.Eng. in Electronic &amp; Information Engineering</div>
+          <div class="edu-school">Huazhong University of Science and Technology</div>
+          <div class="edu-location">Wuhan, China</div>
+          <p class="edu-note">Honours Degree</p>
+          <span class="edu-gpa">Major GPA 84.4 / 100</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PUBLICATIONS -->
+  <section id="publications">
+    <div class="section-header reveal">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Selected Publications</h2>
+      <div class="section-line"></div>
+      <a href="https://scholar.google.com/citations?user=bymBm5wAAAAJ&hl=en" target="_blank" rel="noopener" style="font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);text-decoration:none;white-space:nowrap;border-bottom:1px solid var(--gold);padding-bottom:2px;">↗ Google Scholar</a>
+    </div>
+    <div class="pubs-grid">
+
+      <!-- 2026 NEW — full width highlight -->
+      <div class="pub-item reveal" style="grid-column: 1 / -1; border-left: 3px solid var(--gold); background: var(--warm-white);">
+        <div class="pub-type">Book Chapter · Springer Nature Singapore · 2026 &nbsp;★ New</div>
+        <div class="pub-title">A Human-Centered Privacy (HCP) Approach to AI</div>
+        <div class="pub-authors"><strong>Luyi Sun</strong>, W. Xu &amp; Z. Gao</div>
+        <div class="pub-venue">Handbook of Human-Centered Artificial Intelligence (pp. 1–47) · Springer Nature Singapore · 2026</div>
+      </div>
+
+      <!-- Journal Q1 -->
+      <div class="pub-item reveal">
+        <div class="pub-type">Peer-reviewed Journal · JCR Q1 · IF 4.0 · First Author</div>
+        <div class="pub-title">Privacy Barriers in Health Monitoring: Scoping Review</div>
+        <div class="pub-authors"><strong>Luyi Sun</strong>, Bian Yang, Els Kindt &amp; Jingyi Chu</div>
+        <div class="pub-venue">JMIR Nursing · 2024</div>
+      </div>
+
+      <!-- Conference IEEE ISCC -->
+      <div class="pub-item reveal" style="transition-delay:0.08s">
+        <div class="pub-type">Conference · IEEE ISCC · First Author</div>
+        <div class="pub-title">Your Privacy Preference Matters: A Qualitative Study Envisioned for Homecare</div>
+        <div class="pub-authors"><strong>Luyi Sun</strong> &amp; Bian Yang</div>
+        <div class="pub-venue">IEEE ISCC · 2021</div>
+      </div>
+
+      <!-- Conference pHealth -->
+      <div class="pub-item reveal" style="transition-delay:0.12s">
+        <div class="pub-type">Conference · pHealth · Invited First Author</div>
+        <div class="pub-title">Response Center Services: An Exploratory Study</div>
+        <div class="pub-authors"><strong>Luyi Sun</strong> &amp; Bian Yang</div>
+        <div class="pub-venue">pHealth · 2022</div>
+      </div>
+
+      <!-- Conference ACM SIET 2023 -->
+      <div class="pub-item reveal" style="transition-delay:0.16s">
+        <div class="pub-type">Conference · ACM SIET · First Author</div>
+        <div class="pub-title">Multi-Party Privacy Policy Management in the Context of Health Monitoring: An Exploratory Study</div>
+        <div class="pub-authors"><strong>Luyi Sun</strong>, Bian Yang, Prosper Yeng &amp; Muhammad Ali Fauzi</div>
+        <div class="pub-venue">ACM SIET · 2023</div>
+      </div>
+
+      <!-- Book Chapter Springer 2022 -->
+      <div class="pub-item reveal" style="transition-delay:0.2s">
+        <div class="pub-type">Invited Book Chapter · Springer · First Author</div>
+        <div class="pub-title">Privacy Predictive Models for Homecare Patient Sensing</div>
+        <div class="pub-authors"><strong>Luyi Sun</strong>, Bian Yang, Egil Utheim &amp; Hao Luo</div>
+        <div class="pub-venue">Springer · 2022</div>
+      </div>
+
+      <!-- Book Chapter PriMa Handbook -->
+      <div class="pub-item reveal" style="transition-delay:0.24s">
+        <div class="pub-type">Invited Book Chapter · Springer PriMa Handbook · First Author</div>
+        <div class="pub-title">Multi-Party Privacy Policy Management in Healthcare: User Study and Proposed Solution</div>
+        <div class="pub-authors"><strong>Luyi Sun</strong>, Bian Yang, Prosper Yeng &amp; Muhammad Ali Fauzi</div>
+        <div class="pub-venue">Springer PriMa Handbook</div>
+      </div>
+
+      <!-- Journal Q2 co-author -->
+      <div class="pub-item reveal" style="transition-delay:0.28s">
+        <div class="pub-type">Peer-reviewed Journal · JCR Q2 · IF 2.6 · Co-author</div>
+        <div class="pub-title">Assessing the Legal Aspects of Information Security Requirements for Health Care in 3 Countries: Scoping Review and Framework Development</div>
+        <div class="pub-authors">Prosper Yeng, Muhammad Ali Fauzi, <strong>Luyi Sun</strong> &amp; Bian Yang</div>
+        <div class="pub-venue">JMIR Human Factors · 2022</div>
+      </div>
+
+      <!-- Journal co-author 2024 -->
+      <div class="pub-item reveal" style="transition-delay:0.32s">
+        <div class="pub-type">Peer-reviewed Journal · Co-author</div>
+        <div class="pub-title">Defending Smart Grid Infrastructure — A Scenario-Based Analysis of Cyber-security and Privacy Rules in China, France, Russia, UK, and USA</div>
+        <div class="pub-authors">Øyvind Anders Arntzen Toftegaard, <strong>Luyi Sun</strong> &amp; Bernhard Markus Hämmerli</div>
+        <div class="pub-venue">Journal of Information Warfare · 2024</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="exp-section">
+    <div class="section-header reveal">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Experience &amp; Internships</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="exp-grid">
+      <div class="exp-item reveal">
+        <div class="exp-year">2025 —</div>
+        <div class="exp-title">Postdoctoral Researcher</div>
+        <div class="exp-org">Zhejiang University, Dept. of Psychology &amp; Behavioral Science · Hangzhou</div>
+      </div>
+      <div class="exp-item reveal" style="transition-delay:0.1s">
+        <div class="exp-year">2020</div>
+        <div class="exp-title">Master Thesis — Threat Modeling for Substation Automation (IEC 61850)</div>
+        <div class="exp-org">ABB · Västerås, Sweden</div>
+      </div>
+      <div class="exp-item reveal" style="transition-delay:0.15s">
+        <div class="exp-year">2023</div>
+        <div class="exp-title">PriMa Research Secondment</div>
+        <div class="exp-org">Fraunhofer IGD · Darmstadt, Germany</div>
+      </div>
+      <div class="exp-item reveal" style="transition-delay:0.2s">
+        <div class="exp-year">2022</div>
+        <div class="exp-title">PriMa Research Secondment</div>
+        <div class="exp-org">KU Leuven · Leuven, Belgium</div>
+      </div>
+      <div class="exp-item reveal" style="transition-delay:0.25s">
+        <div class="exp-year">2019</div>
+        <div class="exp-title">Summer Research</div>
+        <div class="exp-org">New Jersey Institute of Technology · Newark, USA</div>
+      </div>
+      <div class="exp-item reveal" style="transition-delay:0.3s">
+        <div class="exp-year">2018</div>
+        <div class="exp-title">Engineering Internship</div>
+        <div class="exp-org">Texas Instruments · Shanghai &amp; ZTE · Nanjing</div>
+      </div>
+    </div>
+
+    <!-- Skills inside dark section -->
+    <div style="margin-top: 5rem">
+      <div class="section-header reveal">
+        <span class="section-num">05</span>
+        <h2 class="section-title">Skills</h2>
+        <div class="section-line"></div>
+      </div>
+      <div class="skills-layout">
+        <div class="skill-group reveal">
+          <h3>Technical</h3>
+          <div class="skill-tags">
+            <span class="tag" style="border-color:rgba(184,150,90,0.4);color:var(--dust)">Python</span>
+            <span class="tag" style="border-color:rgba(184,150,90,0.4);color:var(--dust)">C</span>
+            <span class="tag" style="border-color:rgba(184,150,90,0.4);color:var(--dust)">Java</span>
+            <span class="tag" style="border-color:rgba(184,150,90,0.4);color:var(--dust)">Machine Learning</span>
+            <span class="tag" style="border-color:rgba(184,150,90,0.4);color:var(--dust)">Cybersecurity</span>
+            <span class="tag" style="border-color:rgba(184,150,90,0.4);color:var(--dust)">Threat Modeling</span>
+            <span class="tag" style="border-color:rgba(184,150,90,0.4);color:var(--dust)">Penetration Testing</span>
+            <span class="tag" style="border-color:rgba(184,150,90,0.4);color:var(--dust)">Networking</span>
+            <span class="tag" style="border-color:rgba(184,150,90,0.4);color:var(--dust)">REST API</span>
+            <span class="tag" style="border-color:rgba(184,150,90,0.4);color:var(--dust)">Node.js</span>
+            <span class="tag" style="border-color:rgba(184,150,90,0.4);color:var(--dust)">MongoDB</span>
+          </div>
+        </div>
+        <div class="skill-group reveal" style="transition-delay:0.2s">
+          <h3>Languages</h3>
+          <div class="skill-tags">
+            <span class="tag" style="border-color:rgba(184,150,90,0.4);color:var(--dust)">Chinese (Native)</span>
+            <span class="tag" style="border-color:rgba(184,150,90,0.4);color:var(--dust)">English (TOEFL 100)</span>
+            <span class="tag" style="border-color:rgba(184,150,90,0.4);color:var(--dust)">Norwegian (A2)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEYOND / PIANO -->
+  <section id="beyond" class="beyond-section">
+    <div class="section-header reveal">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Beyond the Lab</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="beyond-content">
+      <div class="beyond-image reveal">
+        <img src="piano.jpg" alt="Luyi Sun at the piano on stage" />
+      </div>
+      <div class="beyond-text reveal" style="transition-delay:0.2s">
+        <h3>Music &amp; <em>Piano</em></h3>
+        <p>
+          Outside research, I find balance and expression at the keyboard. Piano has been a lifelong companion — demanding the same discipline as rigorous research, yet offering something entirely different: pure feeling, unmediated by data.
+        </p>
+        <p>
+          Having studied and lived across China, Sweden, Norway, Belgium, and Germany, I bring a genuinely international perspective to both my science and my life — curious about how culture shapes privacy, trust, and technology adoption in ways no dataset can fully capture.
+        </p>
+        <p>
+          I am also a Marie Curie alumna and a strong advocate for early-career researcher networks, open science, and interdisciplinary dialogue between computer science, law, and psychology.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Luyi Sun · sunluyi [at] zju.edu.cn</p>
+    <div class="footer-links">
+      <a href="https://scholar.google.com/citations?user=bymBm5wAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar</a>
+      <a href="https://www.prima-itn.eu/" target="_blank" rel="noopener">PriMa ITN</a>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+  </script>
+
+</body>
+</html>
