@@ -573,6 +573,96 @@
       font-weight: 300;
     }
 
+    /* ── VIDEO LINK CARD ── */
+    .video-link-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding: 1rem 1.5rem;
+      border: 1px solid var(--dust);
+      background: rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: all 0.35s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .video-link-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s ease;
+      z-index: 0;
+    }
+
+    .video-link-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .video-link-card:hover .video-link-icon,
+    .video-link-card:hover .video-link-text,
+    .video-link-card:hover .video-link-sub {
+      color: var(--paper);
+    }
+
+    .video-link-icon {
+      position: relative;
+      z-index: 1;
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      color: var(--gold);
+      transition: color 0.35s;
+    }
+
+    .video-link-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .video-link-info {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+
+    .video-link-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink);
+      transition: color 0.35s;
+    }
+
+    .video-link-sub {
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--muted);
+      transition: color 0.35s;
+    }
+
+    .video-link-arrow {
+      position: relative;
+      z-index: 1;
+      margin-left: auto;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--gold);
+      transition: color 0.35s, transform 0.35s;
+    }
+
+    .video-link-card:hover .video-link-arrow {
+      color: var(--paper);
+      transform: translateX(4px);
+    }
+
     /* ── FOOTER ── */
     footer {
       background: var(--ink);
@@ -953,7 +1043,8 @@
         <p>
           I am also a Marie Curie alumna and a strong advocate for early-career researcher networks, open science, and interdisciplinary dialogue between computer science, law, and psychology.
         </p>
-   <!-- 网易云音乐视频链接 -->
+
+        <!-- 网易云音乐视频链接 -->
         <a
           href="https://music.163.com/#/video?id=4CFFB4D5387F2BD24415CEB6CF33D58B"
           target="_blank"
@@ -961,12 +1052,14 @@
           class="video-link-card"
         >
           <div class="video-link-icon">
-            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="16" cy="16" r="15" stroke="currentColor" stroke-width="1.5"/>
-              <circle cx="16" cy="16" r="5" stroke="currentColor" stroke-width="1.5"/>
-              <circle cx="16" cy="16" r="1.8" fill="currentColor"/>
-              <line x1="21" y1="7" x2="24" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="21" y1="7" x2="26" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- 网易云音乐风格播放图标 -->
+            <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="18" r="17" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="18" cy="18" r="6" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="18" cy="18" r="2" fill="currentColor"/>
+              <path d="M24 8 L28 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M24 8 L30 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M24 8 L25 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
             </svg>
           </div>
           <div class="video-link-info">
@@ -975,6 +1068,7 @@
           </div>
           <span class="video-link-arrow">→</span>
         </a>
+
       </div>
     </div>
   </section>
